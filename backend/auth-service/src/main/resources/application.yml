@@ -1,0 +1,60 @@
+spring:
+  application:
+    name: auth-service
+  datasource:
+    url: ${MYSQL_URL:jdbc:mysql://localhost:3306/zero_trust_auth?createDatabaseIfNotExist=true}
+    username: ${MYSQL_USERNAME:root}
+    password: ${MYSQL_PASSWORD:root}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+    mongodb:
+      uri: ${MONGO_URI:mongodb://localhost:27017/zero_trust}
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      retries: 3
+  mail:
+    host: ${SMTP_HOST:localhost}
+    port: ${SMTP_PORT:1025}
+    username: ${SMTP_USERNAME:}
+    password: ${SMTP_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: ${SMTP_AUTH:false}
+          starttls:
+            enable: ${SMTP_STARTTLS:false}
+
+server:
+  port: ${SERVER_PORT:8081}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER_URL:http://localhost:8761/eureka}
+
+auth:
+  jwt:
+    issuer: ${JWT_ISSUER:zero-trust-auth}
+    access-private-key-path: ${JWT_ACCESS_PRIVATE_KEY_PATH:}
+    access-public-key-path: ${JWT_ACCESS_PUBLIC_KEY_PATH:}
+    refresh-private-key-path: ${JWT_REFRESH_PRIVATE_KEY_PATH:}
+    refresh-public-key-path: ${JWT_REFRESH_PUBLIC_KEY_PATH:}
+    access-ttl-minutes: ${JWT_ACCESS_TTL_MINUTES:15}
+    refresh-ttl-days: ${JWT_REFRESH_TTL_DAYS:7}
+  mfa:
+    otp-ttl-minutes: ${OTP_TTL_MINUTES:5}
+  onnx:
+    model-path: ${LOGIN_ANOMALY_MODEL_PATH:models/login_anomaly.onnx}

@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: behavior-service
+  data:
+    mongodb:
+      uri: ${MONGO_URI:mongodb://localhost:27017/zero_trust}
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      retries: 3
+
+server:
+  port: ${SERVER_PORT:8083}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER_URL:http://localhost:8761/eureka}
+
+behavior:
+  layer2:
+    model-path: ${BEHAVIOR_IF_MODEL_PATH:models/isolation_forest.onnx}
+  layer3:
+    model-path: ${BEHAVIOR_LSTM_MODEL_PATH:models/lstm_sequence.onnx}

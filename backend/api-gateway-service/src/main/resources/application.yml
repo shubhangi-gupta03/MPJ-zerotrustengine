@@ -1,0 +1,52 @@
+spring:
+  application:
+    name: api-gateway-service
+  cloud:
+    gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+      routes:
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+            - Path=/api/auth/**
+        - id: device-trust-service
+          uri: lb://device-trust-service
+          predicates:
+            - Path=/api/device/**
+        - id: behavior-service
+          uri: lb://behavior-service
+          predicates:
+            - Path=/api/behavior/**
+        - id: risk-scoring-service
+          uri: lb://risk-scoring-service
+          predicates:
+            - Path=/api/risk/**
+        - id: policy-engine-service
+          uri: lb://policy-engine-service
+          predicates:
+            - Path=/api/policy/**
+        - id: monitoring-service
+          uri: lb://monitoring-service
+          predicates:
+            - Path=/api/monitoring/**
+      redis-rate-limiter:
+        replenishRate: 60
+        burstCapacity: 60
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+
+server:
+  port: ${SERVER_PORT:8080}
+
+frontend:
+  origin: ${FRONTEND_ORIGIN:http://localhost:5173}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER_URL:http://localhost:8761/eureka}

@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: event-streaming-service
+  data:
+    mongodb:
+      uri: ${MONGODB_URI:mongodb://localhost:27017/zerotrust}
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+  mail:
+    host: ${SMTP_HOST:localhost}
+    port: ${SMTP_PORT:1025}
+    username: ${SMTP_USERNAME:}
+    password: ${SMTP_PASSWORD:}
+    properties:
+      mail.smtp.auth: ${SMTP_AUTH:false}
+      mail.smtp.starttls.enable: ${SMTP_STARTTLS:false}
+
+server:
+  port: ${PORT:8086}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER_URL:http://localhost:8761/eureka}
+
+alerts:
+  email:
+    from: ${ALERT_FROM:noreply@zerotrust.dev}
+    to: ${ALERT_TO:admin@zerotrust.dev}
+  slack:
+    webhook: ${SLACK_WEBHOOK_URL:}

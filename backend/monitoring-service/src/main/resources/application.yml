@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: monitoring-service
+  data:
+    mongodb:
+      uri: ${MONGODB_URI:mongodb://localhost:27017/zerotrust}
+
+server:
+  port: ${PORT:8087}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER_URL:http://localhost:8761/eureka}
