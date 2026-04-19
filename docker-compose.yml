@@ -2,6 +2,7 @@ services:
   zookeeper:
     image: confluentinc/cp-zookeeper:7.6.1
     container_name: zookeeper
+    env_file: .env
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -13,6 +14,7 @@ services:
   kafka:
     image: confluentinc/cp-kafka:7.6.1
     container_name: kafka
+    env_file: .env
     depends_on:
       zookeeper:
         condition: service_started
@@ -39,15 +41,17 @@ services:
   redis:
     image: redis:7-alpine
     container_name: redis
+    env_file: .env
     command: ["redis-server", "--requirepass", "${REDIS_PASSWORD:-redis_password}"]
     ports:
-      - "6379:6379"
+      - "6380:6379"
     networks:
       - zero-trust-net
 
   mysql:
     image: mysql:8
     container_name: mysql
+    env_file: .env
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE:-zerotrust}
       MYSQL_USER: ${MYSQL_USER:-zt_user}
@@ -67,6 +71,7 @@ services:
   mongodb:
     image: mongodb/mongodb-community-server:7.0-ubuntu2204
     container_name: mongodb
+    env_file: .env
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-admin}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-admin_password}
@@ -86,6 +91,7 @@ services:
       context: ./backend
       dockerfile: ./eureka-server/Dockerfile
     container_name: eureka-server
+    env_file: .env
     ports:
       - "8761:8761"
     networks:
@@ -96,6 +102,7 @@ services:
       context: ./backend
       dockerfile: ./api-gateway-service/Dockerfile
     container_name: api-gateway-service
+    env_file: .env
     depends_on:
       eureka-server:
         condition: service_started
@@ -115,6 +122,7 @@ services:
       context: ./backend
       dockerfile: ./auth-service/Dockerfile
     container_name: auth-service
+    env_file: .env
     depends_on:
       mysql:
         condition: service_healthy
@@ -138,6 +146,7 @@ services:
       context: ./backend
       dockerfile: ./device-trust-service/Dockerfile
     container_name: device-trust-service
+    env_file: .env
     depends_on:
       mongodb:
         condition: service_healthy
@@ -156,6 +165,7 @@ services:
       context: ./backend
       dockerfile: ./behavior-service/Dockerfile
     container_name: behavior-service
+    env_file: .env
     depends_on:
       mongodb:
         condition: service_healthy
@@ -178,6 +188,7 @@ services:
       context: ./backend
       dockerfile: ./risk-scoring-service/Dockerfile
     container_name: risk-scoring-service
+    env_file: .env
     depends_on:
       behavior-service:
         condition: service_started
@@ -195,6 +206,7 @@ services:
       context: ./backend
       dockerfile: ./policy-engine-service/Dockerfile
     container_name: policy-engine-service
+    env_file: .env
     depends_on:
       risk-scoring-service:
         condition: service_started
@@ -216,6 +228,7 @@ services:
       context: ./backend
       dockerfile: ./event-streaming-service/Dockerfile
     container_name: event-streaming-service
+    env_file: .env
     depends_on:
       kafka:
         condition: service_healthy
@@ -234,6 +247,7 @@ services:
       context: ./backend
       dockerfile: ./monitoring-service/Dockerfile
     container_name: monitoring-service
+    env_file: .env
     depends_on:
       mysql:
         condition: service_healthy
@@ -259,6 +273,7 @@ services:
       context: ./frontend
       dockerfile: ./Dockerfile
     container_name: frontend
+    env_file: .env
     depends_on:
       api-gateway-service:
         condition: service_started

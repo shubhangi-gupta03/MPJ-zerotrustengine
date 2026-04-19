@@ -5,6 +5,8 @@ COPY pom.xml ./pom.xml
 COPY common-lib/pom.xml common-lib/pom.xml
 COPY device-trust-service/pom.xml device-trust-service/pom.xml
 
+RUN sed -i '/<modules>/,/<\/modules>/{ /<module>/{ /common-lib/!{ /device-trust-service/!d } } }' pom.xml
+
 RUN mvn -B -ntp -pl device-trust-service -am dependency:go-offline
 
 COPY common-lib/src common-lib/src

@@ -5,6 +5,8 @@ COPY pom.xml ./pom.xml
 COPY common-lib/pom.xml common-lib/pom.xml
 COPY monitoring-service/pom.xml monitoring-service/pom.xml
 
+RUN sed -i '/<modules>/,/<\/modules>/{ /<module>/{ /common-lib/!{ /monitoring-service/!d } } }' pom.xml
+
 RUN mvn -B -ntp -pl monitoring-service -am dependency:go-offline
 
 COPY common-lib/src common-lib/src

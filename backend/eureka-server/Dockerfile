@@ -4,6 +4,8 @@ WORKDIR /workspace
 COPY pom.xml ./pom.xml
 COPY eureka-server/pom.xml eureka-server/pom.xml
 
+RUN sed -i '/<modules>/,/<\/modules>/{ /<module>/{ /eureka-server/!d } }' pom.xml
+
 RUN mvn -B -ntp -pl eureka-server -am dependency:go-offline
 
 COPY eureka-server/src eureka-server/src

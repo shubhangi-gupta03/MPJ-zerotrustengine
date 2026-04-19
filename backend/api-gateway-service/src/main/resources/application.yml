@@ -1,4 +1,6 @@
 spring:
+  main:
+    allow-circular-references: true
   application:
     name: api-gateway-service
   cloud:
@@ -30,9 +32,7 @@ spring:
           uri: lb://monitoring-service
           predicates:
             - Path=/api/monitoring/**
-      redis-rate-limiter:
-        replenishRate: 60
-        burstCapacity: 60
+      # redis-rate-limiter removed
 
   data:
     redis:

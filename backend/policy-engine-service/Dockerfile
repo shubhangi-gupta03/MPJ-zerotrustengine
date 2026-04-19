@@ -5,6 +5,8 @@ COPY pom.xml ./pom.xml
 COPY common-lib/pom.xml common-lib/pom.xml
 COPY policy-engine-service/pom.xml policy-engine-service/pom.xml
 
+RUN sed -i '/<modules>/,/<\/modules>/{ /<module>/{ /common-lib/!{ /policy-engine-service/!d } } }' pom.xml
+
 RUN mvn -B -ntp -pl policy-engine-service -am dependency:go-offline
 
 COPY common-lib/src common-lib/src

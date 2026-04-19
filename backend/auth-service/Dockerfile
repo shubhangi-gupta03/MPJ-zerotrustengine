@@ -5,6 +5,8 @@ COPY pom.xml ./pom.xml
 COPY common-lib/pom.xml common-lib/pom.xml
 COPY auth-service/pom.xml auth-service/pom.xml
 
+RUN sed -i '/<modules>/,/<\/modules>/{ /<module>/{ /common-lib/!{ /auth-service/!d } } }' pom.xml
+
 RUN mvn -B -ntp -pl auth-service -am dependency:go-offline
 
 COPY common-lib/src common-lib/src

@@ -5,6 +5,8 @@ COPY pom.xml ./pom.xml
 COPY common-lib/pom.xml common-lib/pom.xml
 COPY behavior-service/pom.xml behavior-service/pom.xml
 
+RUN sed -i '/<modules>/,/<\/modules>/{ /<module>/{ /common-lib/!{ /behavior-service/!d } } }' pom.xml
+
 RUN mvn -B -ntp -pl behavior-service -am dependency:go-offline
 
 COPY common-lib/src common-lib/src

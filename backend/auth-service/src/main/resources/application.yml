@@ -2,10 +2,11 @@ spring:
   application:
     name: auth-service
   datasource:
-    url: ${MYSQL_URL:jdbc:mysql://localhost:3306/zero_trust_auth?createDatabaseIfNotExist=true}
+    url: ${MYSQL_URL:jdbc:mysql://mysql:3306/zero_trust_auth?createDatabaseIfNotExist=true}
     username: ${MYSQL_USERNAME:root}
     password: ${MYSQL_PASSWORD:root}
   jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
       ddl-auto: update
     open-in-view: false
@@ -14,13 +15,13 @@ spring:
         format_sql: true
   data:
     redis:
-      host: ${REDIS_HOST:localhost}
+      host: ${REDIS_HOST:redis}
       port: ${REDIS_PORT:6379}
       password: ${REDIS_PASSWORD:}
     mongodb:
-      uri: ${MONGO_URI:mongodb://localhost:27017/zero_trust}
+      uri: ${MONGO_URI:mongodb://admin:admin_password@mongodb:27017/zerotrust?authSource=admin}
   kafka:
-    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:kafka:9092}
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer

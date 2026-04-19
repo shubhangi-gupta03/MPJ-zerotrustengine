@@ -5,6 +5,8 @@ COPY pom.xml ./pom.xml
 COPY common-lib/pom.xml common-lib/pom.xml
 COPY event-streaming-service/pom.xml event-streaming-service/pom.xml
 
+RUN sed -i '/<modules>/,/<\/modules>/{ /<module>/{ /common-lib/!{ /event-streaming-service/!d } } }' pom.xml
+
 RUN mvn -B -ntp -pl event-streaming-service -am dependency:go-offline
 
 COPY common-lib/src common-lib/src

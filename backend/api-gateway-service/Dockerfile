@@ -5,6 +5,8 @@ COPY pom.xml ./pom.xml
 COPY common-lib/pom.xml common-lib/pom.xml
 COPY api-gateway-service/pom.xml api-gateway-service/pom.xml
 
+RUN sed -i '/<modules>/,/<\/modules>/{ /<module>/{ /common-lib/!{ /api-gateway-service/!d } } }' pom.xml
+
 RUN mvn -B -ntp -pl api-gateway-service -am dependency:go-offline
 
 COPY common-lib/src common-lib/src

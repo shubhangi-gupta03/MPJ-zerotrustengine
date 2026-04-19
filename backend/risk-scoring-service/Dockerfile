@@ -5,6 +5,8 @@ COPY pom.xml ./pom.xml
 COPY common-lib/pom.xml common-lib/pom.xml
 COPY risk-scoring-service/pom.xml risk-scoring-service/pom.xml
 
+RUN sed -i '/<modules>/,/<\/modules>/{ /<module>/{ /common-lib/!{ /risk-scoring-service/!d } } }' pom.xml
+
 RUN mvn -B -ntp -pl risk-scoring-service -am dependency:go-offline
 
 COPY common-lib/src common-lib/src
